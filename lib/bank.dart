@@ -5,37 +5,37 @@ import 'exceptions.dart';
 class Bank {
   final Map<String, BankAccount> _accounts = {};
 
-  void _ensureUnique(String acc) {
-    if (_accounts.containsKey(acc)) {
+  void _unique(String number) {
+    if (_accounts.containsKey(number)) {
       throw Exception("Account number already exists");
     }
   }
 
-  BankAccount createSavings(String acc, String name, double bal) {
-    _ensureUnique(acc);
-    return _accounts[acc] = SavingsAccount(acc, name, bal);
+  BankAccount createSavings(String num, String name, double bal) {
+    _unique(num);
+    return _accounts[num] = SavingsAccount(num, name, bal);
   }
 
-  BankAccount createChecking(String acc, String name, double bal) {
-    _ensureUnique(acc);
-    return _accounts[acc] = CheckingAccount(acc, name, bal);
+  BankAccount createChecking(String num, String name, double bal) {
+    _unique(num);
+    return _accounts[num] = CheckingAccount(num, name, bal);
   }
 
-  BankAccount createPremium(String acc, String name, double bal) {
-    _ensureUnique(acc);
-    return _accounts[acc] = PremiumAccount(acc, name, bal);
+  BankAccount createPremium(String num, String name, double bal) {
+    _unique(num);
+    return _accounts[num] = PremiumAccount(num, name, bal);
   }
 
-  BankAccount createStudent(String acc, String name, double bal) {
-    _ensureUnique(acc);
-    return _accounts[acc] = StudentAccount(acc, name, bal);
+  BankAccount createStudent(String num, String name, double bal) {
+    _unique(num);
+    return _accounts[num] = StudentAccount(num, name, bal);
   }
 
-  BankAccount find(String acc) {
-    if (!_accounts.containsKey(acc)) {
-      throw AccountNotFoundException("Account $acc not found");
+  BankAccount find(String num) {
+    if (!_accounts.containsKey(num)) {
+      throw AccountNotFoundException("Account $num not found");
     }
-    return _accounts[acc]!;
+    return _accounts[num]!;
   }
 
   void transfer(String from, String to, double amount) {
@@ -51,22 +51,20 @@ class Bank {
 
   void applyMonthlyInterest() {
     for (var acc in _accounts.values) {
+      // ensure we call the interest method only on InterestBearing accounts
       if (acc is InterestBearing) {
-        acc.applyMonthlyInterest();
+        // cast to InterestBearing then call the method
+        (acc as InterestBearing).applyMonthlyInterest();
       }
     }
   }
 
-  void resetMonthlyCounters() {
-    for (var acc in _accounts.values) {
-      acc.resetMonthlyCounters();
-    }
+  void resetCounters() {
+    for (var acc in _accounts.values) acc.resetMonthlyCounters();
   }
 
   void report() {
     print("----- BANK REPORT -----");
-    for (var acc in _accounts.values) {
-      acc.displayInfo();
-    }
+    for (var a in _accounts.values) a.displayInfo();
   }
 }

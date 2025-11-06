@@ -10,16 +10,16 @@ void main() {
   bank.createStudent("ST1", "Dave", 400);
 
   bank.find("S1").deposit(200);
-  bank.find("S1").withdraw(100);
-
+  bank.find("C1").withdraw(350);
   bank.transfer("P1", "S1", 5000);
 
   bank.report();
-  bank.applyMonthlyInterest();
-  bank.resetMonthlyCounters();
 
-  print("\n--- Account Details (S1) ---");
-  for (var log in bank.find("S1").history) {
-    print(log);
+  bank.applyMonthlyInterest();
+  bank.resetCounters();
+
+  print("\n--- History for S1 ---");
+  for (var h in bank.find("S1").history) {
+    print(h);
   }
 }
